@@ -8,17 +8,16 @@
 #define PAUSE 50000
 #define BLOCK '#'
 
-
-
 void draw(WINDOW *win);
-
 int test_border(WINDOW *win, int x1, int y1);
+void points(WINDOW *win);
 
+int score = 0;
 int main(int argc, char *argv[])
 {
     int x = 1, y = 18;
     int max_y = 0, max_x = 0;
-    int input, score = 0, timer = 0;
+    int input, timer = 0, check = 0;
     time_t t;
     t = time(NULL);
 
@@ -34,7 +33,6 @@ int main(int argc, char *argv[])
     box(win, 0, 0);
     draw(win);
     mvwhline(win, 19, 1, '-', 38);
-    //wrefresh(win);
 
     //for keyborad inputs
     keypad(win, true);
@@ -44,14 +42,9 @@ int main(int argc, char *argv[])
         mvwprintw(win, 20, 3, "SCORE: %d", score);
         mvwprintw(win, 20, 28, "TIMER: %d", timer);
 
-        //color support
-        start_color();
+        mvwprintw(win, y, x, "0"); //player
+        points(win); //add points
 
-        init_pair(1, COLOR_GREEN, COLOR_BLACK);
-        attron(COLOR_PAIR(1));
-        mvwprintw(win, y, x, "0");
-        attroff(COLOR_PAIR(1));
-        refresh();
         wrefresh(win);
 
         input = wgetch(win);
@@ -77,7 +70,6 @@ int main(int argc, char *argv[])
             {
                 mvwaddch(win, y, x, ' ');
                 x++;
-                score++;
             }
             break;
         case KEY_LEFT:
@@ -97,9 +89,16 @@ int main(int argc, char *argv[])
 //to avoid border and objects
 int test_border(WINDOW *win, int y, int x)
 {
-    int check;
-    check = mvwinch(win, y, x);
-    return (check == ' ');
+    int look;
+    look = mvwinch(win, y, x);
+    if (look == ' ')
+        return 1;
+    else if (look == '*')
+    {
+        score++;
+        return 1;
+    }
+    return 0;
 }
 
 //drawing
@@ -118,4 +117,20 @@ void draw(WINDOW *win)
     mvwhline(win, 10, 12, BLOCK, 5);
     mvwhline(win, 13, 4, BLOCK, 2);
     mvwhline(win, 2, 20, BLOCK, 5);
+}
+
+void points(WINDOW *win)
+{
+    //if (check == 1)
+    //{
+        int y = 0, x = 0;
+       // do
+        //{
+            srand(time(NULL));
+            y = (rand() % 15) + 1;
+            x = (rand() % 37) + 1;
+            if (mvwinch(win, y, x) == ' ')
+                mvwaddch(win, y, x, '*');
+        //} while (mvwinch(win, y, x) != '*');
+    //}
 }
