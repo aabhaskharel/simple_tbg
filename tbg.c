@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 {
     int x = 1, y = 18;
     int max_y = 0, max_x = 0;
-    int input, timer = 0, check = 0;
+    int input, steps = -1, check = 0;
     time_t t;
     t = time(NULL);
 
@@ -39,8 +39,9 @@ int main(int argc, char *argv[])
 
     do
     {
+        steps++;
         mvwprintw(win, 20, 3, "SCORE: %d", score);
-        mvwprintw(win, 20, 28, "TIMER: %d", timer);
+        mvwprintw(win, 20, 28, "STEPS: %d", steps);
 
         mvwprintw(win, y, x, "0"); //player
         points(win); //add points
@@ -86,7 +87,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-//to avoid border and objects
+//to avoid border and check points
 int test_border(WINDOW *win, int y, int x)
 {
     int look;
@@ -101,13 +102,13 @@ int test_border(WINDOW *win, int y, int x)
     return 0;
 }
 
-//drawing
+//to draw outline
 void draw(WINDOW *win)
 {
     int x, y;
     for (x = 1; x < 40; x += 5)
     {
-        for (y = 2; y < 17; y++)
+        for (y = 2; y < 18; y++)
         {
             mvwhline(win, y, x, BLOCK, 3);
         }
@@ -117,8 +118,14 @@ void draw(WINDOW *win)
     mvwhline(win, 10, 12, BLOCK, 5);
     mvwhline(win, 13, 4, BLOCK, 2);
     mvwhline(win, 2, 20, BLOCK, 5);
+    mvwhline(win, 9, 6, ' ', 3);
+    mvwhline(win, 4, 11, ' ', 3);
+    mvwhline(win, 16, 34, BLOCK,2);
+    mvwhline(win, 2, 9, BLOCK, 2);
+    mvwhline(win, 11, 16, ' ', 3);
 }
 
+//to insert points
 void points(WINDOW *win)
 {
     //if (check == 1)
