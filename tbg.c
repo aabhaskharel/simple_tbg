@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 {
     int x = 1, y = 18;
     int max_y = 0, max_x = 0;
-    int input, steps = -1, check = 0;
+    int input, steps = 0, check = 0;
     time_t t;
     t = time(NULL);
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     curs_set(FALSE);
 
     //main box
-    WINDOW *win = newwin(21, 40, 0, 0);
+    WINDOW *win = newwin(21, 40, 20,80);
     refresh();
     box(win, 0, 0);
     draw(win);
@@ -37,15 +37,24 @@ int main(int argc, char *argv[])
     //for keyborad inputs
     keypad(win, true);
 
+    start_color();
+    init_pair(1,COLOR_GREEN,COLOR_BLACK);
+    init_pair(2,COLOR_YELLOW,COLOR_BLACK);
+
     do
-    {
-        steps++;
+    {   
+        wattron(win, A_BOLD);
         mvwprintw(win, 20, 3, "SCORE: %d", score);
         mvwprintw(win, 20, 28, "STEPS: %d", steps);
-
+        
+        wattron(win,COLOR_PAIR(1));
         mvwprintw(win, y, x, "0"); //player
-        points(win); //add points
+        wattroff(win,COLOR_PAIR(1));
 
+        wattron(win,COLOR_PAIR(2));
+        points(win); //add points
+        wattroff(win,COLOR_PAIR(2));
+        wattroff(win, A_BOLD);
         wrefresh(win);
 
         input = wgetch(win);
@@ -53,10 +62,11 @@ int main(int argc, char *argv[])
         switch (input)
         {
         case KEY_UP:
-            if ((y > 0) && test_border(win, y - 1, x))
+            if ((y > 1) && test_border(win, y - 1, x))
             {
                 mvwaddch(win, y, x, ' ');
                 y--;
+                steps++;
             }
             break;
         case KEY_DOWN:
@@ -64,20 +74,23 @@ int main(int argc, char *argv[])
             {
                 mvwaddch(win, y, x, ' ');
                 y++;
+                steps++;
             }
             break;
         case KEY_RIGHT:
-            if ((x < 39) && test_border(win, y, x + 1))
+            if ((x < 38) && test_border(win, y, x + 1))
             {
                 mvwaddch(win, y, x, ' ');
                 x++;
+                steps++;
             }
             break;
         case KEY_LEFT:
-            if ((x > 0) && test_border(win, y, x - 1))
+            if ((x > 1) && test_border(win, y, x - 1))
             {
                 mvwaddch(win, y, x, ' ');
                 x--;
+                steps++;
             }
             break;
         }
@@ -92,12 +105,15 @@ int test_border(WINDOW *win, int y, int x)
 {
     int look;
     look = mvwinch(win, y, x);
-    if (look == ' ')
-        return 1;
-    else if (look == '*')
+    while(look!='#')
     {
-        score++;
-        return 1;
+        if (look == ' ')
+            return 1;
+        else
+        {
+            score++;
+            return 1;
+        }
     }
     return 0;
 }
