@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     curs_set(FALSE);
 
     //main box
-    WINDOW *win = newwin(21, 40, 20,80);
+    WINDOW *win = newwin(21, 40, 20, 80);
     refresh();
     box(win, 0, 0);
     draw(win);
@@ -38,22 +38,22 @@ int main(int argc, char *argv[])
     keypad(win, true);
 
     start_color();
-    init_pair(1,COLOR_GREEN,COLOR_BLACK);
-    init_pair(2,COLOR_YELLOW,COLOR_BLACK);
+    init_pair(1, COLOR_GREEN, COLOR_BLACK);
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 
     do
-    {   
+    {
         wattron(win, A_BOLD);
         mvwprintw(win, 20, 3, "SCORE: %d", score);
         mvwprintw(win, 20, 28, "STEPS: %d", steps);
-        
-        wattron(win,COLOR_PAIR(1));
-        mvwprintw(win, y, x, "0"); //player
-        wattroff(win,COLOR_PAIR(1));
 
-        wattron(win,COLOR_PAIR(2));
+        wattron(win, COLOR_PAIR(1));
+        mvwprintw(win, y, x, "0"); //player
+        wattroff(win, COLOR_PAIR(1));
+
+        wattron(win, COLOR_PAIR(2));
         points(win); //add points
-        wattroff(win,COLOR_PAIR(2));
+        wattroff(win, COLOR_PAIR(2));
         wattroff(win, A_BOLD);
         wrefresh(win);
 
@@ -105,7 +105,7 @@ int test_border(WINDOW *win, int y, int x)
 {
     int look;
     look = mvwinch(win, y, x);
-    while(look!='#')
+    while (look != '#')
     {
         if (look == ' ')
             return 1;
@@ -122,6 +122,8 @@ int test_border(WINDOW *win, int y, int x)
 void draw(WINDOW *win)
 {
     int x, y;
+    mvwprintw(win, 0, 15, "SIMPLE TBG");
+    mvwprintw(win, 22, 3, "Use arrows to navigate.");
     for (x = 1; x < 40; x += 5)
     {
         for (y = 2; y < 18; y++)
@@ -136,7 +138,7 @@ void draw(WINDOW *win)
     mvwhline(win, 2, 20, BLOCK, 5);
     mvwhline(win, 9, 6, ' ', 3);
     mvwhline(win, 4, 11, ' ', 3);
-    mvwhline(win, 16, 34, BLOCK,2);
+    mvwhline(win, 16, 34, BLOCK, 2);
     mvwhline(win, 2, 9, BLOCK, 2);
     mvwhline(win, 11, 16, ' ', 3);
 }
@@ -146,14 +148,14 @@ void points(WINDOW *win)
 {
     //if (check == 1)
     //{
-        int y = 0, x = 0;
-       // do
-        //{
-            srand(time(NULL));
-            y = (rand() % 15) + 1;
-            x = (rand() % 37) + 1;
-            if (mvwinch(win, y, x) == ' ')
-                mvwaddch(win, y, x, '*');
-        //} while (mvwinch(win, y, x) != '*');
+    int y = 0, x = 0;
+    // do
+    //{
+    srand(time(NULL));
+    y = (rand() % 15) + 1;
+    x = (rand() % 37) + 1;
+    if (mvwinch(win, y, x) == ' ')
+        mvwaddch(win, y, x, '*');
+    //} while (mvwinch(win, y, x) != '*');
     //}
 }
