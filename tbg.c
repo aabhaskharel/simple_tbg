@@ -123,6 +123,7 @@ void draw(WINDOW *win)
 {
     int x, y;
     mvwprintw(win, 0, 15, "SIMPLE TBG");
+    mvwprintw(win, 22, 3, "Use arrows to navigate.");
     for (x = 1; x < 40; x += 5)
     {
         for (y = 2; y < 18; y++)
